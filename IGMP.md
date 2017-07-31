@@ -625,3 +625,5 @@ OFPST_FLOW reply (OF1.3) (xid=0x2):
 
 ## 在Ryu上安装IGMP监听应用
 
+如何查看OpenFlow控制器是否实现IGMP功能：
+
