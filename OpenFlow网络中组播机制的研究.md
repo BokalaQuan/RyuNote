@@ -194,11 +194,35 @@ def port_loop(self):
 
 ### 组播转发树更新模块
 
+![组播树更新](https://github.com/BokalaQuan/RyuNote/blob/master/%E7%BB%84%E6%92%AD%E6%A0%91%E6%9B%B4%E6%96%B0.png)
 
 
 
+### 流表下发模块
 
+| 接口名称                             | 调用方法                                     | 功能   |
+| -------------------------------- | :--------------------------------------- | ---- |
+| get all the switches             | get_all_switches()                       |      |
+| get all the links                | get_all_links()                          |      |
+| get the switch                   | get_switch(dpid)                         |      |
+| get all flows stats              | get_all_flows_stats()                    |      |
+| get ports stats                  | get_ports_stats(dpid)                    |      |
+| get ports description            | get_ports_description(dpid)              |      |
+| add a flow entry                 | add_flow_entry(dpid, priority, match, actions) |      |
+| modify all matching flow entries | modify_all_matching_flow_entries(dpid, priority, match, actions) |      |
+| modify flow entry strictly       | modify_flow_entry_strictly(dpid, priority, match, actions) |      |
+| delete all matching flow entries | delete_all_matching_flow_entries(dpid, priority, match, actions) |      |
+| delete flow entry strictly       | delete_flow_entry_strictly(dpid, priority, match, actions) |      |
+| delete all flow entries          | delete_all_flow_entries(dpid)            |      |
+| get queue status                 | get_queue_status(dpid)                   |      |
+| get queue configuration          | get_queue_configuration(dpid)            |      |
+| set queue                        | set_queue(dpid, port_name, q_type, max_rate, queues) |      |
+| delete queue                     | delete_queue(dpid)                       |      |
+| get all of QoS rules             | get_qos_rules(dpid)                      |      |
+| set a QoS rule                   | set_qos_rule(dpid, priority, match, actions) |      |
+| delete QoS rules                 | delete_qos_rules(dpid, qos_id)           |      |
 
+组件 **rest_topology** 通过调用 topology 的 get_link 接口实现了获取拓扑的功能，组件 **rest_qos** 提供查询、配置 
 
 
 
