@@ -76,3 +76,83 @@ struct ofp_port_stats {
 | get all the links         | GET /v1.0/topology/links           | 获取OpenFlow网络中所有OF交换机的连接信息 |
 | get the links of a switch | GET /v1.0/topology/links/<dpid>    | 获取编号为dpid的OF交换机的连接信息      |
 
+
+
+**Ryu**启动时加上==--observe-links== 参数，表明 **Ryu** 监听链路发现事件。组件 **rest_topology** 通过调用 topology 的 get_link 接口实现了获取拓扑的功能，所以控制器可以直接调用 **rest_topology** 的 **API** 来获取 **OpenFlow** 网络的拓扑。
+
+
+
+### 链路状态获取模块
+
+```python
+self.bd_matrix	# 每个端口的总带宽
+self.tx_matrix	# 每个端口的tx_bypes
+self.dij_matrix	# 各个链路利用率
+self.port_loop	# 线程用来定时time遍历读取每个OF交换机的每个端口的统计数据
+```
+
+链路利用率的计算公式
+$$
+speed=(tx.bytes - tx.matrix[m][n])/time
+$$
+
+$$
+dij.matrix[m][n]=speed/bd.matrix[m][n]
+$$
+
+```python
+def port_loop(self):
+    while True:
+        # 遍历获取所有的OF交换机的端口统计信息
+        for dpid in dpids:
+            ports = get_ports_stats(dpid)
+            # 遍历编号为dpid的OF交换机的所有端口的统计信息
+            for port in ports[dpid]:
+                # 判断当前port是否在links中
+                # 如果在，则读取该port的tx_bytes字段的数据进行并行计算
+                if port_no in links:
+                    speed = (tx_bytes - tx_matrix[m][n]) / time
+                    link_utilization = speed / bandwidth
+                    dij_matrix[m][n] = link_utilization
+                    tx_matrix[m][n] = tx_bytes
+		# 睡眠time时间
+        sleep(time)
+```
+
+
+
+### 组播报文解析与转发模块
+
+![组播报文解析与转发](C:\Users\quanw\Documents\GitHub\RyuNote\组播报文解析与转发.png)
+
+
+
+1. 控制器接收到OF交换机的Packet_In消息后，首先判断其以太网协议类型，如果是IPV4协议（0x0800），则继续解析，若不是，则丢弃该报文；
+2. 判断IPV4报文首部的协议类型，若是IGMP协议，则继续解析，若不是，则丢弃该报文；
+3. 判断IGMP报文首部的协议类型，若是Membership Query(0x11)，则是查询报文，则不做处理，直接将此报文Packet_Out给与主机相连接的OF交换机上；若是Membership Report(0x22)，则是报告报文，继续解析；
+4. IGMP V3报告报文中有 M 个 **Group** **Records** ，逐一进行解析。判断每个Record中**Record** **Type** 字段，若是Change To Exclude Mode，则是**Join**，若是  Change To Include Mode，则是 **Leave**。将报文Packet_Out给与每个组播路由器直连的OF交换机上。
+5. 确定是 **Join** 或 **Leave** 后，则通知组播组成员管理模块进行处理。处理完成之后，再通知组播转发树生成模块继续处理。
+
+
+
+### 组播组成员管理模块
+
+
+
+|    组播地址    |  主机IP地址   |
+| :--------: | :-------: |
+| group_ip_0 | ip_00 ... |
+| group_ip_1 | ip_10 ... |
+
+
+
+![组播成员管理](C:\Users\quanw\Documents\GitHub\RyuNote\组播成员管理.png)
+
+
+
+
+
+
+
+
+
