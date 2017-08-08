@@ -123,7 +123,7 @@ def port_loop(self):
 
 ### 组播报文解析与转发模块
 
-![组播报文解析与转发](C:\Users\quanw\Documents\GitHub\RyuNote\组播报文解析与转发.png)
+![组播报文解析与转发](https://github.com/BokalaQuan/RyuNote/blob/master/%E7%BB%84%E6%92%AD%E6%8A%A5%E6%96%87%E8%A7%A3%E6%9E%90%E4%B8%8E%E8%BD%AC%E5%8F%91.png)
 
 
 
@@ -146,7 +146,7 @@ def port_loop(self):
 
 
 
-![组播成员管理](C:\Users\quanw\Documents\GitHub\RyuNote\组播成员管理.png)
+![组播成员管理](https://github.com/BokalaQuan/RyuNote/blob/master/%E7%BB%84%E6%92%AD%E6%88%90%E5%91%98%E7%AE%A1%E7%90%86.png)
 
 
 
