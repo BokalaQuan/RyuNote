@@ -152,7 +152,47 @@ def port_loop(self):
 
 ### 组播转发树生成模块
 
+![Multicast Tree Created](https://github.com/BokalaQuan/RyuNote/blob/master/%E7%BB%84%E6%92%AD%E7%94%9F%E6%88%90%E6%A0%91%E8%AE%A1%E7%AE%97.png)
 
+
+
+* 加入组播
+
+1. 加入新组播
+
+> 若是加入新组播，那么该模块就以直连路由器的OF交换机作为根节点，直连主机的OF交换机作为目的节点，运行Dijkstra算法来计算生成最优转发路径，格式如下：
+>
+> ***dij_path = [{dpid1 : port1}, {dpid2 : port2}, ...]*** 
+>
+> 该转发路径最后指向Packet_In报告报文的OF交换机，最后，该交换机将组播流转发给主机，最终的转发路径 *path* 为：
+>
+> ***path = dij_path + {in_dpid : in_port}*** 
+>
+> ***in_dpid***  是 Packet_In报文的OF交换机编号，***in_port***  是OF交换机接收到报文的端口。
+
+2. 加入已经存在的组播
+
+> 如果是已经存在的组播，那么组播转发树已经存在。以直连主机的OF交换机作为根节点，组播转发树中所有的交换机作为目的节点，利用Dijkstra算法计算得到离根节点最近的目的节点 ***dipd_t*** 的路径，然后得到路径 ***leaf_dij_path***，格式如下：
+>
+>  ***leaf_dij_path = [{dpid_t : port_t}, ...]*** 
+>
+> 搜索组播转发树得到边界OF交换机到编号 dpid_t 的OF交换机的路径 root_path。最后得到完整的path：
+>
+> ***path = root_path + leaf_dij_path + {in_dpid : in_port}*** 
+>
+> 组播转发树的结构：
+>
+> ***opt = {dpid1 : [port1], dpid2 : [port21, port22], ...}***
+>
+> 所有组播的转发树保存在 opts 中， 结构如下：
+>
+> ***opts = {'group_ip0': opt0, 'group_ip1':opt1, ...}***
+
+* 离开组播
+
+
+
+### 组播转发树更新模块
 
 
 
