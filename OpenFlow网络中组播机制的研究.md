@@ -222,7 +222,11 @@ def port_loop(self):
 | set a QoS rule                   | set_qos_rule(dpid, priority, match, actions) |      |
 | delete QoS rules                 | delete_qos_rules(dpid, qos_id)           |      |
 
-组件 **rest_topology** 通过调用 topology 的 get_link 接口实现了获取拓扑的功能，组件 **rest_qos** 提供查询、配置 
+组件 **rest_topology** 通过调用 topology 的 get_link 接口实现了获取拓扑的功能，组件 **rest_qos** 提供查询、配置 Queue 和QoS的**API**。
+
+![流标下发](https://github.com/BokalaQuan/RyuNote/blob/master/%E6%B5%81%E8%A1%A8%E4%B8%8B%E5%8F%91.png)
+
+
 
 
 
